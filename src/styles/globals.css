@@ -1,0 +1,113 @@
+@theme {
+  --spacing: 4px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --font-heading: 700 24px/1.2 Inter, system-ui, sans-serif;
+  --font-heading-lg: 700 32px/1.2 Inter, system-ui, sans-serif;
+  --font-subheading: 600 20px/1.4 Inter, system-ui, sans-serif;
+  --font-subheading-sm: 600 18px/1.4 Inter, system-ui, sans-serif;
+  --font-body: 400 16px/1.5 Inter, system-ui, sans-serif;
+  --font-body-sm: 400 14px/1.5 Inter, system-ui, sans-serif;
+  --font-small: 400 12px/1.4 Inter, system-ui, sans-serif;
+  --font-code: 400 14px/1.5 "Fira Code", "JetBrains Mono", monospace;
+}
+
+:root {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-2: #F1F5F9;
+  --border: #E2E8F0;
+  --text: #0F172A;
+  --text-muted: #64748B;
+  --text-disabled: #94A3B8;
+  --icon: #475569;
+  --icon-muted: #94A3B8;
+  --row-hover: #F8FAFC;
+  --sidebar-bg: #F1F5F9;
+  --sidebar-active-bg: rgba(59, 130, 246, 0.1);
+  --sidebar-text: #0F172A;
+  --sidebar-text-muted: #64748B;
+  --primary: #3B82F6;
+  --primary-contrast: #FFFFFF;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --success: #10B981;
+  --focus-ring: #3B82F6;
+  /* Slightly stronger grid for readability on light surfaces */
+  --chart-grid: rgba(15, 23, 42, 0.12);
+  --chart-axis: rgba(15, 23, 42, 0.65);
+  --chart-tooltip-bg: #FFFFFF;
+}
+
+.dark {
+  --bg: #0B1220;
+  --surface: #0F172A;
+  --surface-2: #1A2332;
+  --border: rgba(148, 163, 184, 0.2);
+  --text: #E5E7EB;
+  --text-muted: #94A3B8;
+  --text-disabled: #64748B;
+  --icon: #94A3B8;
+  --icon-muted: #64748B;
+  --row-hover: #1A2332;
+  --sidebar-bg: #0F172A;
+  --sidebar-active-bg: rgba(96, 165, 250, 0.15);
+  --sidebar-text: #E5E7EB;
+  --sidebar-text-muted: #94A3B8;
+  --primary: #60A5FA;
+  --primary-contrast: #FFFFFF;
+  --danger: #F87171;
+  --warning: #FBBF24;
+  --success: #34D399;
+  --focus-ring: #60A5FA;
+  /* Slightly stronger grid for readability on dark surfaces */
+  --chart-grid: rgba(148, 163, 184, 0.22);
+  --chart-axis: rgba(226, 232, 240, 0.70);
+  --chart-tooltip-bg: #1A2332;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+  }
+}
+
+body {
+  font: var(--font-body);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 { font: var(--font-heading-lg); color: var(--text); }
+h2 { font: var(--font-heading); color: var(--text); }
+h3 { font: var(--font-subheading); color: var(--text); }
+h4 { font: var(--font-subheading-sm); color: var(--text); }
+p { font: var(--font-body); }
+small { font: var(--font-small); }
+code, pre { font: var(--font-code); }
+input, textarea, select, button { font: var(--font-body-sm); }
+button { cursor: pointer; border: none; background: none; }
+a { color: inherit; text-decoration: none; }
+
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
