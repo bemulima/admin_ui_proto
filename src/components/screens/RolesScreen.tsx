@@ -3,6 +3,7 @@ import { Plus, Users as UsersIcon, Shield, Edit } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
+import { Checkbox } from '../ui/checkbox';
 import { mockRoles, Role } from '../../utils/mockData';
 import { Modal } from '../ui/Modal';
 import { showToast } from '../ui/Toast';
@@ -104,11 +105,10 @@ export function RolesScreen() {
                             role.permissions[resource as keyof typeof role.permissions]?.[action as 'create' | 'read' | 'update' | 'delete'];
                           return (
                             <td key={role.id} className="px-4 py-3 text-center">
-                              <input
-                                type="checkbox"
+                              <Checkbox
                                 checked={hasPermission || false}
-                                onChange={() => showToast('Permission updated', 'success')}
-                                className="w-5 h-5 rounded border border-[var(--border)] bg-[var(--surface-1)] accent-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+                                onCheckedChange={() => showToast('Permission updated', 'success')}
+                                className="size-5"
                                 aria-label={`${role.name} ${action} ${resource}`}
                               />
                             </td>
@@ -131,11 +131,10 @@ export function RolesScreen() {
                 <td className="px-4 py-3 text-[var(--text-secondary)] pl-8">read</td>
                 {mockRoles.map((role) => (
                   <td key={role.id} className="px-4 py-3 text-center">
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       checked={role.permissions.statistics.read}
-                      onChange={() => showToast('Permission updated', 'success')}
-                      className="h-5 w-5 rounded border border-[var(--border)] bg-[var(--surface-2)] accent-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+                      onCheckedChange={() => showToast('Permission updated', 'success')}
+                      className="size-5"
                       aria-label={`${role.name} read statistics`}
                     />
                   </td>

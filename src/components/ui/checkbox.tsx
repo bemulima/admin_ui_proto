@@ -13,8 +13,9 @@ function Checkbox({
   return (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
+      data-ui="checkbox-v3"
       className={cn(
-        "peer border border-[var(--border)] bg-[var(--surface)] data-[state=checked]:bg-[var(--primary)] data-[state=checked]:text-[var(--primary-contrast)] data-[state=checked]:border-[var(--primary)] size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:border-[var(--focus-ring)] focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] aria-invalid:border-[var(--danger)] aria-invalid:ring-2 aria-invalid:ring-[var(--danger)] disabled:cursor-not-allowed disabled:opacity-50",
+        "group peer border border-solid size-4 shrink-0 rounded-[4px] shadow-xs transition-shadow outline-none focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 [--cb-bg:hsl(var(--surface))] [--cb-border:hsl(var(--border))] [--cb-ring:hsl(var(--border))] [--cb-fg:hsl(var(--primary-contrast))] hover:[--cb-bg:hsl(var(--surface-2))] data-[state=checked]:[--cb-bg:hsl(var(--primary))] data-[state=checked]:[--cb-border:hsl(var(--primary))] data-[state=checked]:[--cb-ring:hsl(var(--primary))] data-[state=checked]:[--cb-fg:hsl(var(--primary-contrast))] data-[state=checked]:hover:[--cb-bg:hsl(var(--primary))] disabled:[--cb-bg:hsl(var(--surface-2))] disabled:[--cb-border:hsl(var(--border))] disabled:[--cb-ring:hsl(var(--border))] disabled:[--cb-fg:hsl(var(--text-muted))] ![background:var(--cb-bg)] ![border-color:var(--cb-border)] ![color:var(--cb-fg)] ![--tw-ring-color:var(--cb-ring)] focus-visible:![--tw-ring-color:hsl(var(--focus-ring))]",
         className,
       )}
       {...props}

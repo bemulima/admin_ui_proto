@@ -99,7 +99,8 @@ p { font: var(--font-body); }
 small { font: var(--font-small); }
 code, pre { font: var(--font-code); }
 input, textarea, select, button { font: var(--font-body-sm); }
-button { cursor: pointer; border: none; background: none; }
+button { cursor: pointer; }
+button:not([role="checkbox"]):not([data-slot="checkbox"]) { border: none; background: none; }
 a { color: inherit; text-decoration: none; }
 
 *:focus-visible {
