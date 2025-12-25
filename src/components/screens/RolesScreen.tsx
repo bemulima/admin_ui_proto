@@ -12,9 +12,38 @@ import React from 'react';
 export function RolesScreen() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [roles, setRoles] = useState<Role[]>(() => mockRoles);
 
   const resources = ['courses', 'lessons', 'tasks', 'users', 'reviews'] as const;
   const actions = ['create', 'read', 'update', 'delete'] as const;
+  type ResourceKey = keyof Role['permissions'];
+  type ActionKey = keyof Role['permissions']['courses'];
+
+  const updatePermission = <R extends ResourceKey>(
+    roleId: string,
+    resource: R,
+    action: keyof Role['permissions'][R],
+    nextChecked: boolean,
+  ) => {
+    setRoles((prevRoles) =>
+      prevRoles.map((role) => {
+        if (role.id !== roleId) {
+          return role;
+        }
+        const resourcePermissions = role.permissions[resource];
+        return {
+          ...role,
+          permissions: {
+            ...role.permissions,
+            [resource]: {
+              ...resourcePermissions,
+              [action]: nextChecked,
+            },
+          },
+        };
+      }),
+    );
+  };
 
   return (
     <div className="space-y-8">
@@ -32,7 +61,7 @@ export function RolesScreen() {
 
       {/* Role Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {mockRoles.map((role) => (
+        {roles.map((role) => (
           <div
             key={role.id}
             className="bg-[var(--surface-1)] border border-[var(--border)] rounded-lg p-6 hover:shadow-lg transition-shadow"
@@ -69,7 +98,7 @@ export function RolesScreen() {
             <thead>
               <tr className="border-b border-[var(--border)]">
                 <th className="px-4 py-3 text-left text-[var(--text-secondary)]">Resource</th>
-                {mockRoles.map((role) => (
+                {roles.map((role) => (
                   <th key={role.id} className="px-4 py-3 text-center text-[var(--text-secondary)]">
                     {role.name}
                   </th>
@@ -81,7 +110,7 @@ export function RolesScreen() {
                 <React.Fragment key={resource}>
                   <tr className="border-b border-[var(--border)]">
                     <td
-                      colSpan={mockRoles.length + 1}
+                      colSpan={roles.length + 1}
                       className="px-4 py-2 bg-[var(--surface-2)] text-[var(--text-primary)] uppercase"
                     >
                       {resource}
@@ -91,7 +120,7 @@ export function RolesScreen() {
                     .filter((action) => {
                       // Skip 'create' and 'delete' for statistics
                       if (resource === 'reviews' && (action === 'create' || action === 'delete')) {
-                        return mockRoles.some(
+                        return roles.some(
                           (role) => role.permissions[resource as keyof typeof role.permissions]?.[action as 'create' | 'delete']
                         );
                       }
@@ -100,14 +129,17 @@ export function RolesScreen() {
                     .map((action) => (
                       <tr key={`${resource}-${action}`} className="border-b border-[var(--border)]">
                         <td className="px-4 py-3 text-[var(--text-secondary)] pl-8">{action}</td>
-                        {mockRoles.map((role) => {
+                        {roles.map((role) => {
                           const hasPermission =
-                            role.permissions[resource as keyof typeof role.permissions]?.[action as 'create' | 'read' | 'update' | 'delete'];
+                            role.permissions[resource as ResourceKey]?.[action as ActionKey];
                           return (
                             <td key={role.id} className="px-4 py-3 text-center">
                               <Checkbox
                                 checked={hasPermission || false}
-                                onCheckedChange={() => showToast('Permission updated', 'success')}
+                                onCheckedChange={(nextChecked) => {
+                                  updatePermission(role.id, resource, action, nextChecked);
+                                  showToast('Permission updated', 'success');
+                                }}
                                 className="size-5"
                                 aria-label={`${role.name} ${action} ${resource}`}
                               />
@@ -121,7 +153,7 @@ export function RolesScreen() {
               {/* Statistics - special case */}
               <tr className="border-b border-[var(--border)]">
                 <td
-                  colSpan={mockRoles.length + 1}
+                  colSpan={roles.length + 1}
                   className="px-4 py-2 bg-[var(--surface-2)] text-[var(--text-primary)] uppercase"
                 >
                   statistics
@@ -129,11 +161,14 @@ export function RolesScreen() {
               </tr>
               <tr className="border-b border-[var(--border)]">
                 <td className="px-4 py-3 text-[var(--text-secondary)] pl-8">read</td>
-                {mockRoles.map((role) => (
+                {roles.map((role) => (
                   <td key={role.id} className="px-4 py-3 text-center">
                     <Checkbox
                       checked={role.permissions.statistics.read}
-                      onCheckedChange={() => showToast('Permission updated', 'success')}
+                      onCheckedChange={(nextChecked) => {
+                        updatePermission(role.id, 'statistics', 'read', nextChecked);
+                        showToast('Permission updated', 'success');
+                      }}
                       className="size-5"
                       aria-label={`${role.name} read statistics`}
                     />

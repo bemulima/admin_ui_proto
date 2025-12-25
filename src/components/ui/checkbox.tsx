@@ -1,33 +1,40 @@
 "use client";
 
 import * as React from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { CheckIcon } from "lucide-react";
 
 import { cn } from "./utils";
 
-function Checkbox({
-  className,
-  ...props
-}: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
-  return (
-    <CheckboxPrimitive.Root
-      data-slot="checkbox"
-      data-ui="checkbox-v3"
-      className={cn(
-        "group peer border border-solid size-4 shrink-0 rounded-[4px] shadow-xs transition-shadow outline-none focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 [--cb-bg:hsl(var(--surface))] [--cb-border:hsl(var(--border))] [--cb-ring:hsl(var(--border))] [--cb-fg:hsl(var(--primary-contrast))] hover:[--cb-bg:hsl(var(--surface-2))] data-[state=checked]:[--cb-bg:hsl(var(--primary))] data-[state=checked]:[--cb-border:hsl(var(--primary))] data-[state=checked]:[--cb-ring:hsl(var(--primary))] data-[state=checked]:[--cb-fg:hsl(var(--primary-contrast))] data-[state=checked]:hover:[--cb-bg:hsl(var(--primary))] disabled:[--cb-bg:hsl(var(--surface-2))] disabled:[--cb-border:hsl(var(--border))] disabled:[--cb-ring:hsl(var(--border))] disabled:[--cb-fg:hsl(var(--text-muted))] ![background:var(--cb-bg)] ![border-color:var(--cb-border)] ![color:var(--cb-fg)] ![--tw-ring-color:var(--cb-ring)] focus-visible:![--tw-ring-color:hsl(var(--focus-ring))]",
-        className,
-      )}
-      {...props}
-    >
-      <CheckboxPrimitive.Indicator
-        data-slot="checkbox-indicator"
-        className="flex items-center justify-center text-current transition-none"
-      >
-        <CheckIcon className="size-3.5" />
-      </CheckboxPrimitive.Indicator>
-    </CheckboxPrimitive.Root>
-  );
-}
+type CheckboxProps = Omit<
+  React.ComponentPropsWithoutRef<"input">,
+  "type" | "onChange"
+> & {
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onCheckedChange?: (checked: boolean) => void;
+};
+
+const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+  ({ className, onChange, onCheckedChange, ...props }, ref) => {
+    const isControlled = typeof props.checked === "boolean";
+    const hasChangeHandler = Boolean(onChange || onCheckedChange);
+    return (
+      <input
+        ref={ref}
+        type="checkbox"
+        className={cn(
+          "appearance-none relative size-4 shrink-0 rounded-[4px] border border-[hsl(var(--border))] bg-[hsl(var(--surface))] shadow-xs transition-shadow hover:bg-[hsl(var(--surface-2))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--focus-ring))] focus-visible:ring-offset-0 checked:bg-[hsl(var(--primary))] checked:border-[hsl(var(--primary))] checked:text-[hsl(var(--primary-contrast))] after:content-[''] after:absolute after:left-1/2 after:top-1/2 after:h-2.5 after:w-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:border-r-2 after:border-b-2 after:border-current after:opacity-0 checked:after:opacity-100 disabled:bg-[hsl(var(--surface-2))] disabled:border-[hsl(var(--border))] disabled:text-[hsl(var(--text-muted))] disabled:opacity-50 disabled:cursor-not-allowed disabled:checked:text-[hsl(var(--text-muted))]",
+          className,
+        )}
+        onChange={(event) => {
+          onChange?.(event);
+          onCheckedChange?.(event.currentTarget.checked);
+        }}
+        readOnly={props.readOnly ?? (isControlled && !hasChangeHandler)}
+        {...props}
+      />
+    );
+  },
+);
+
+Checkbox.displayName = "Checkbox";
 
 export { Checkbox };
